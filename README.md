@@ -8,6 +8,4 @@ go get github.com/dgrijalva/jwt-go
 go get github.com/fatih/color
 
 # Build and Run
-go build cmd/dashboard.go
-
-
+go build C:/Go/dashboard-api/cmd/dashboard.go && .\dashboard.exe
