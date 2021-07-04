@@ -3,6 +3,7 @@ package controllers
 import (
 	"dashboard-api/pkg/dbms"
 	"dashboard-api/pkg/dbms/model"
+	"dashboard-api/pkg/dbms/repository"
 	"dashboard-api/pkg/handlers/responses"
 	"encoding/json"
 	"errors"
@@ -25,7 +26,20 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db, err := dbms.Connect()
+	if err != nil {
+		responses.Err(w, http.StatusInternalServerError, err)
+		return
+	}
 	defer db.Close()
 
-	responses.JSON(w, http.StatusOK, user)
+	repo := repository.NewUsersRepository(db)
+	userDB, err := repo.Login(user.Email)
+	if err != nil {
+		responses.Err(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	//fmt.Println(userDB)
+
+	responses.JSON(w, http.StatusOK, userDB)
 }

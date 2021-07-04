@@ -17,6 +17,23 @@ func NewUsersRepository(db *sql.DB) *Users {
 }
 
 //Login irá retornar as informações de login de um usuário
-func (repository Users) Login(email, password string) (model.User, error) {
-	return model.User{}, errors.New("repositorio de usuário, função login deverá ser implementada")
+func (repository Users) Login(email string) (model.User, error) {
+	sql, err := repository.db.Query("select id, name, email, password from users where email = ?", email)
+	if err != nil {
+		return model.User{}, errors.New("error sql prepare - " + err.Error())
+	}
+	defer sql.Close()
+
+	var user model.User
+	if sql.Next() {
+		if err = sql.Scan(
+			&user.Id,
+			&user.Name,
+			&user.Email,
+			&user.Password); err != nil {
+			return model.User{}, err
+		}
+	}
+
+	return user, nil
 }
