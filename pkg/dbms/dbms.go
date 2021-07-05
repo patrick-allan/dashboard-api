@@ -14,13 +14,13 @@ import (
 func Connect() (*sql.DB, error) {
 	var connectionString = fmt.Sprintf("./%s?cache=shared&mode=memory",
 		config.DB_DATABASE)
-	fmt.Println(connectionString)
-	// Initialize connection object.
+
+	//Initialize connection object.
 	db, err := sql.Open("sqlite3", connectionString)
 	if err != nil {
 		return nil, errors.New("DB Connect error - " + err.Error())
 	}
-
+	//Executa um ping no DB
 	err = db.Ping()
 	if err != nil {
 		return nil, errors.New("DB Ping error - " + err.Error())
