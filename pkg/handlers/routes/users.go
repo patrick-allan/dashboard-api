@@ -9,4 +9,10 @@ var userRoutes = []Route{
 		Func:   controllers.Login,
 		Auth:   false,
 	},
+	{
+		URI:    "/register",
+		Method: "POST",
+		Func:   controllers.Register,
+		Auth:   false,
+	},
 }

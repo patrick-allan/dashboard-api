@@ -20,7 +20,7 @@ func NewUsersRepository(db *sql.DB) *Users {
 func (repository Users) Login(email string) (model.User, error) {
 	sql, err := repository.db.Query("select id, name, email, password from users where email = ?", email)
 	if err != nil {
-		return model.User{}, errors.New("error sql prepare - " + err.Error())
+		return model.User{}, errors.New("error sql login - " + err.Error())
 	}
 	defer sql.Close()
 
@@ -36,4 +36,34 @@ func (repository Users) Login(email string) (model.User, error) {
 	}
 
 	return user, nil
+}
+
+//Register irá incluir um novo usuário
+func (repository Users) Register(user model.User) (int, error) {
+	sql, err := repository.db.Prepare(
+		"insert into users (name, email, username, password, birthdate, document, created_at) values (?,?,?,?,?,?,?)",
+	)
+	if err != nil {
+		return 0, errors.New("error sql register user - " + err.Error())
+	}
+	defer sql.Close()
+
+	result, err := sql.Exec(
+		user.Name,
+		user.Email,
+		user.Username,
+		user.Password,
+		user.Birthdate,
+		user.Document,
+		user.Created_at)
+	if err != nil {
+		return 0, err
+	}
+
+	lastId, err := result.LastInsertId()
+	if err != nil {
+		return 0, errors.New("não foi possível obter o usuário inserido")
+	}
+
+	return int(lastId), nil
 }
