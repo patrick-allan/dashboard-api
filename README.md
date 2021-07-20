@@ -12,5 +12,3 @@ Essa aplicação é o backend do Dashboard https://github.com/patrick-allan/dash
 ### Build 
 go build C:/Go/dashboard-api/cmd/dashboard.go
 
-### Build and Run
-go build C:/Go/dashboard-api/cmd/dashboard.go && .\dashboard.exe
